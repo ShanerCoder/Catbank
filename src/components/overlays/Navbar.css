@@ -1,0 +1,25 @@
+.navbarDiv {
+  margin-top: 1px;
+  border-bottom: 1px solid black;
+}
+
+
+.logoImage {
+  height: 100px;
+  width: 100px;
+  cursor: pointer;
+}
+
+.logoText {
+  font-size: 4rem;
+  cursor: pointer;
+}
+
+.col {
+  padding-left: 0%;
+  padding-right: 0%;
+}
+
+.navbarRow {
+  margin: 0;
+}
