@@ -16,7 +16,9 @@ You may also see any lint errors in the console.
 
 ## Local Setup
 
-The back-end can be ran in a separate terminal. This is done through running `node index.js` in Catbank/node-postgres
+The back-end can be ran in a separate terminal. This is done in Catbank/node-postgres through running:
+
+### `node index.js`
 
 The local database used for this project has been Postgres.
 
