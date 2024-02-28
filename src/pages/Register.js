@@ -3,19 +3,53 @@ import InputForm from "../components/text-inputs/InputForm";
 import "./Login.css";
 import { useLoadingStore } from "../context/loadingScreenContext";
 import { useState } from "react";
+import { useUserStore } from "../context/userDetailsContext";
+import { useNavigate } from "react-router-dom";
+import { backendUrl } from "../constants";
 
 function Register() {
   const [accountNumber, setAccountNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [errorText, setErrorText] = useState("");
   const [loadingScreen, showLoadingScreen] = useLoadingStore();
+  const [user, setUser] = useUserStore();
+  const navigate = useNavigate();
 
   function handleRegister(e) {
     e.preventDefault();
-    console.log("register + " + accountNumber + " " + password);
+    const body = {
+      accountNumber: accountNumber,
+      password: password,
+    };
+
     showLoadingScreen({ type: "SHOW_LOADING" });
-    setTimeout(() => {
-      showLoadingScreen({ type: "HIDE_LOADING" });
-    }, 5000);
+    fetch(backendUrl + "/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        const parsedData = JSON.parse(data);
+        const userData = {
+          accountNumber: parsedData.user.accountNumber,
+          silveuros: parsedData.user.silveuros,
+        };
+        setUser(userData);
+      })
+      .catch((error) => {
+        setErrorText("Error registering - " + error.message);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          navigate("/accountsummary");
+          showLoadingScreen({ type: "HIDE_LOADING" });
+        }, 1000);
+      });
   }
 
   return (

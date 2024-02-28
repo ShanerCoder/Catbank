@@ -14,57 +14,68 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
+## Local Setup
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The back-end can be ran in a separate terminal. This is done through running `node index.js` in Catbank/node-postgres
 
-### `npm run build`
+The local database used for this project has been Postgres.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Two tables should be created in a Database called 'catbank' with the following schemas:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Creating accounts table
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+-- Table: public.accounts
 
-### `npm run eject`
+-- DROP TABLE IF EXISTS public.accounts;
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+CREATE TABLE IF NOT EXISTS public.accounts
+(
+"accountNumber" integer NOT NULL,
+password text COLLATE pg_catalog."default" NOT NULL,
+silveuros text COLLATE pg_catalog."default",
+CONSTRAINT accounts_pkey PRIMARY KEY ("accountNumber")
+)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+TABLESPACE pg_default;
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+ALTER TABLE IF EXISTS public.accounts
+OWNER to postgres;
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Creating transaction history table
 
-## Learn More
+-- Table: public.transactions
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+-- DROP TABLE IF EXISTS public.transactions;
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+CREATE TABLE IF NOT EXISTS public.transactions
+(
+"accountNumberSentFrom" integer NOT NULL,
+"accountNumberSentTo" integer NOT NULL,
+"amountSent" text COLLATE pg_catalog."default" NOT NULL,
+created_dtm time without time zone DEFAULT now(),
+CONSTRAINT "fk_accountNumber" FOREIGN KEY ("accountNumberSentFrom")
+REFERENCES public.accounts ("accountNumber") MATCH SIMPLE
+ON UPDATE CASCADE
+ON DELETE CASCADE
+)
 
-### Code Splitting
+TABLESPACE pg_default;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+ALTER TABLE IF EXISTS public.transactions
+OWNER to postgres;
 
-### Analyzing the Bundle Size
+## Updating Constants
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The host URL should be reflected `src\constants.js`
 
-### Making a Progressive Web App
+.sample.env in Catbank/node-postgres should be renamed to .env
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+An example of all the values filled in are:
+HOST_PORT=3001
+POOL_PORT=5432
+DB_HOST=localhost
+DB_USER=myuser
+DB_NAME=catbank
+DB_PASSWORD=catbank
+SILVEURO_PROMOTION=100
+SECRET_KEY=7a6127d73b01ec155f417fe9d4e79b6a7caa059ccf1d16049990152a8f26c44f

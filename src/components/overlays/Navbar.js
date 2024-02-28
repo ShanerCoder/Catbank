@@ -24,7 +24,7 @@ function Navbar() {
           </Col>
           <Col xs={2}>
             <h2 className="logoText" onClick={() => handleClick("/")}>
-              Cat Bank
+              Catbank
             </h2>
           </Col>
         </Row>

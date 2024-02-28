@@ -1,0 +1,35 @@
+.accountSummaryDiv {
+  text-align: center;
+  margin-top: 20px;
+}
+
+h2 {
+  text-align: center;
+}
+
+p {
+  text-align: center;
+}
+
+.errorText {
+  font-size: 2rem;
+  color: red;
+}
+
+.successText {
+  font-size: 2rem;
+  color: green;
+}
+
+.navbarRow {
+  margin: 0;
+}
+
+.card {
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: .5rem;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}

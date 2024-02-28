@@ -6,7 +6,6 @@ const Store = createContext();
 const reducer = (state, action) => {
   switch (action.type) {
     case "SHOW_LOADING": {
-      console.log("show loading screen");
       return true;
     }
     case "HIDE_LOADING": {
