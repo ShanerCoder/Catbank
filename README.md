@@ -68,7 +68,7 @@ OWNER to postgres;
 
 ## Updating Constants
 
-The host URL should be reflected `src\constants.js`
+The host URL should be reflected in `src\constants.js`
 
 .sample.env in Catbank/node-postgres should be renamed to .env
 
