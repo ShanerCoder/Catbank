@@ -31,6 +31,9 @@ function Register() {
       body: JSON.stringify(body),
     })
       .then((response) => {
+        if (response.status !== 200) {
+          throw new Error("Account already exists");
+        }
         return response.text();
       })
       .then((data) => {
@@ -40,13 +43,13 @@ function Register() {
           silveuros: parsedData.user.silveuros,
         };
         setUser(userData);
+        navigate("/accountsummary");
       })
       .catch((error) => {
         setErrorText("Error registering - " + error.message);
       })
       .finally(() => {
         setTimeout(() => {
-          navigate("/accountsummary");
           showLoadingScreen({ type: "HIDE_LOADING" });
         }, 1000);
       });
@@ -57,6 +60,7 @@ function Register() {
       <Navbar />
       <div className="formContainer">
         <InputForm title="Register" submitFunction={handleRegister}>
+          {errorText && <p className="errorText">{errorText}</p>}
           <div className="form-group">
             <label htmlFor="AccountNumber">
               Please enter the account number provided to you by Cat Bank

@@ -47,14 +47,14 @@ const registerUser = async (body) => {
         'INSERT INTO accounts ("accountNumber", "password", "silveuros") VALUES ($1, $2, $3) RETURNING *',
         [accountNumber, encryptedPassword, encryptedSilveuroCount],
         (error, results) => {
+          if (error) {
+            reject(error);
+          }
           if (results && results.rows) {
             const user = results.rows[0];
             user.silveuros = decryptValue(user.silveuros);
             delete user.password;
             resolve(user);
-          }
-          if (error) {
-            reject(error);
           } else {
             reject(new Error("No results found"));
           }
